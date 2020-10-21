@@ -72,7 +72,8 @@
 2. Alterar de http para https em spider/country.py
 3. conda install ipython 
     - Instalar ipython ou pip install ipython
-4. scrapy shell 
+4. scrapy shell
+    - Dentro do scrapy shell o comando shelp() mostra o help
     - Abre o shell para fazer alguns testes
     - scrapy shell site - Se fosse informado o site já baixaria a página com apenas 1 passo.
 5. fetch("https://www.worldometers.info/world-population/population-by-country/")
@@ -320,8 +321,30 @@ Leia - https://escoladedados.org/tutoriais/xpath-para-raspagem-de-dados-em-html/
         
 ## Múltiplas páginas
 
-https://www.tinydeal.com.hk but now they changed it to https://www.cigabuy.com/consumer-electronics-c-56_75-pg-1.html
+https://www.cigabuy.com/consumer-electronics-c-56_75-pg-1.html
 
-Please make sure to use the new domain name 'cigabuy' instead of 'tinydeal'.
+scrapy startproject cigabuy
+scrapy genspider special_offers www.cigabuy.com/specials.html
+
+alterar para https
+
+* testes: 
+
+        scrapy shell https://www.cigabuy.com/consumer-electronics-c-56_75-pg-1.html
+
+ response.xpath("//div[@class='r_b_c']").xpath(".//div[@class='p_box_wrapper']").css("div").xpath("a[@class='p_box_title']/text()").getall()
+
+ response.xpath("//div[@class='r_b_c']").xpath(".//div[@class='p_box_wrapper']").css("div").css("a.p_box_title::text").getall()
+
+ response.xpath("//div[@class='r_b_c']").xpath(".//div[@class='p_box_wrapper']").css("div").css("a.p_box_title::attr(href)").getall()
+
+ response.xpath("//div[@class='r_b_c']").xpath(".//div[@class='p_box_wrapper']").css("div").xpath("a[@class='p_box_title']/@href").getall()
 
 
+scrapy crawl special_offers -o dataset_encoding.json
+
+adicionar 
+
+FEED_EXPORT_ENCODING = 'utf-8'
+
+dentro de settings dentro de cigabuy para não ter problemas com encoding para json
