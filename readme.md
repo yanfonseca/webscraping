@@ -65,7 +65,8 @@
 
 1. scrapy startproject worldometers - Criar projeto worldometers
 1. Ir para pasta worldometers
-1. scrapy genspider countries www.worldometers.info/world-population/population-by-country 
+1. Criar spider
+    - scrapy genspider countries www.worldometers.info/world-population/population-by-country 
     - Precisa apagar a última barra(/) porque o scrapy adiciona automaticamente e também apagar o https://
     - Countries é o nome do spider, o nome deve ser único
 2. Alterar de http para https em spider/country.py
@@ -130,7 +131,7 @@ class CountriesSpider(scrapy.Spider):
             'countries':countries
         }
 
-14. No terminal - rodar o spider countries
+14. No terminal - rodar o spider countries, precisa ser no mesmo nível que está o arquivo scrapy.cfg
     1.  scrapy crawl countries
 
 ## XML-Path Language e CSS-Cascading Style Sheet
@@ -140,8 +141,6 @@ class CountriesSpider(scrapy.Spider):
 #### Selecionando pelas tags
 
     Site para testes - https://try.jsoup.org/
-
-    Xpath é melhor que permite ir para frente e para trás em um texto html
 
     Usa "." busca por atributos das classes.
     * <div class ='intro'>
@@ -224,6 +223,8 @@ Seleciona os índices ímpares.
 
 #### Selecionando com Xpath
 
+Xpath é melhor que permite ir para frente e para trás em um texto html
+
 Site para testes: https://scrapinghub.github.io/xpath-playground/
 
 Para selecionar tags com Xpath é necessário dupla barra na frente primeiro
@@ -295,5 +296,14 @@ Procura todas h1 na html
 
 Leia - https://escoladedados.org/tutoriais/xpath-para-raspagem-de-dados-em-html/#:~:text=Basta%20selecionar%20o%20texto%20que,a%20op%C3%A7%C3%A3o%20'Copiar%20XPath'.&text=Esta%20fun%C3%A7%C3%A3o%20%C3%A9%20interessante%2C%20mas,ter%20express%C3%B5es%20leg%C3%ADveis%20ou%20curtas.
 
+### Após feitas mudanças necessárias para exportar nome do país e população
 
+* Para exportar 
+        
+        scrapy crawl countries -o population_dataset.json
 
+            Dentro do VSCODE alt+shift+f para formatar o json
+
+        scrapy crawl countries -o population_dataset.csv
+
+        scrapy crawl countries -o population_dataset.xml
