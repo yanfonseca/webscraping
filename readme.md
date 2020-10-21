@@ -275,9 +275,9 @@ Procura todas h1 na html
 
 * //p[@id='unique']/preceding::node()
 
-* //p[@id='unique']/preceding::h1
+ //p[@id='unique']/preceding::h1
 
-* //p[@id='outside']/preceding-sibling::node()
+ //p[@id='outside']/preceding-sibling::node()
 
 ##### Para baixo
 
@@ -294,6 +294,15 @@ Procura todas h1 na html
 //div[@class='intro']/descendant::node()
 
 
+#### Comparação
+
+In [41]: response.xpath('//tbody/tr/td/a[@href]/text()')[0]
+Out[41]: <Selector xpath='//tbody/tr/td/a[@href]/text()' data='China'>
+
+In [42]: response.css('tbody tr td a[href]::text')[0]
+Out[42]: <Selector xpath='descendant-or-self::tbody/descendant-or-self::*/tr/descendant-or-self::*/td/descendant-or-self::*/a[@href]/text()' data='China'>
+
+
 Leia - https://escoladedados.org/tutoriais/xpath-para-raspagem-de-dados-em-html/#:~:text=Basta%20selecionar%20o%20texto%20que,a%20op%C3%A7%C3%A3o%20'Copiar%20XPath'.&text=Esta%20fun%C3%A7%C3%A3o%20%C3%A9%20interessante%2C%20mas,ter%20express%C3%B5es%20leg%C3%ADveis%20ou%20curtas.
 
 ### Após feitas mudanças necessárias para exportar nome do país e população
@@ -307,3 +316,5 @@ Leia - https://escoladedados.org/tutoriais/xpath-para-raspagem-de-dados-em-html/
         scrapy crawl countries -o population_dataset.csv
 
         scrapy crawl countries -o population_dataset.xml
+        
+        
