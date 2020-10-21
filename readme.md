@@ -143,83 +143,83 @@ class CountriesSpider(scrapy.Spider):
     Site para testes - https://try.jsoup.org/
 
     Usa "." busca por atributos das classes.
-    * <div class ='intro'>
-    * .nomedaclasse
-    * .intro
+     <div class ='intro'>
+     .nomedaclasse
+     .intro
 
     Usa "#" busca por atributos das ids.
-    * <div id ='location'>
-    * #nomedaid
-    * #location
+     <div id ='location'>
+     #nomedaid
+     #location
     
     Para acessar tag dentro de uma tag específica, por exemplo, uma div.
-    * tag.atributo
-    * tag#location
-    * .bold.italic  
+     tag.atributo
+     tag#location
+     .bold.italic  
         <p class="bold italic">Hi, I have two classes</p>
 
 Para múltiplas classes e ids
     
-    * .class.class
-    * #id#id
+     .class.class
+     #id#id
 
 Se a class nao é padrão do html e foi criada, para selecionar é um pouco diferente:
 
-    * li[data-identifier=7]  ou [data-identifier=7] 
+     li[data-identifier=7]  ou [data-identifier=7] 
         <li data-identifier="7">Item 1</li> 
 
 Para selecionar apenas atributos de classe que começam com https, usando ^.
 
-    * a[href^='https']
+     a[href^='https']
         <a href="https://www.google.com">
 
 Aqui os atributos que terminam com algum texto, usando $. Lembre-se de regex.
 
-    * a[href$='fr']
+     a[href$='fr']
         <a href="http://www.google.fr">
 
 É possível buscar qualquer atributos em tag que começam com outros parametros também, por exemplo:
 
-    * [class^='in']
+     [class^='in']
 
 É possível achar a parte do meio de um atributo de classe também, usando *.
 
-    * a[href*='google']
+     a[href*='google']
         <a href="http://www.google.fr">
 
 Se não quer selecionar algo aparece no início e nem no final, usando ~.
 
-    * a[href~='fr']      obs: Não funcionou no teste.
+     a[href~='fr']      obs: Não funcionou no teste.
 
 #### Como selecionar pela posição?
 
 Selecionar dos os p dentro da div e da classe intro. Não pega os descendentes das tags que estão dentro:
 
-    * div.intro p
+     div.intro p
     
 Se for necessário pegar um descente específico, basta informar:
 
-    * div.intro p, span#location
+     div.intro p, span#location
 
 Se for necessário pegar todos os descentes da div, classe intro e tag p:
 
-    * div.intro > p
+     div.intro > p
 
 Para pegar a tag p imidiatamente depois da div com classe intro, só serve se estiver imediatamente depois da div, caso contrário não retornará nada. + span não retornará nada.
 
-    * div.intro + p
+     div.intro + p
 
 Seleciona item da lista que está no índice 1.
 
-    * li:nth-child(1)
+     li:nth-child(1)
   
 Seleciona os índices ímpares.
 
-    * li:nth-child(odd)
+     li:nth-child(odd)
 
 Seleciona os índices ímpares.
 
-    * li:nth-child(even)
+     li:nth-child(even)
 
 #### Selecionando com Xpath
 
@@ -231,67 +231,67 @@ Para selecionar tags com Xpath é necessário dupla barra na frente primeiro
 
 Procura todas h1 na html
 
-    * //h1
+    //h1
 
-* //div[@class='intro']
+    //div[@class='intro']
 
-* //div[@class='intro']/p
+    //div[@class='intro']/p
 
-* //div[@class='intro' or @class='outro']/p
+    //div[@class='intro' or @class='outro']/p
 
-* //div[@class='intro' or @class='outro']/p/text()
+    //div[@class='intro' or @class='outro']/p/text()
 
-* //a/@href
+    //a/@href
 
-* //a[starts-with(@href, 'https')]
+    //a[starts-with(@href, 'https')]
 
-* //a[ends-with(@href, 'fr')]   Vai retornar erro porque só suporta a partir da versão 2.0. Não vai funcionar nos browsers.
+    //a[ends-with(@href, 'fr')]   Vai retornar erro porque só suporta a partir da versão 2.0. Não vai funcionar nos browsers.
 
-* //a[contains(@href, 'google')]
+    //a[contains(@href, 'google')]
 
-* //a[contains(text(), 'France')] Busca no texto e não na tag. É case sensitive.
+    //a[contains(text(), 'France')] Busca no texto e não na tag. É case sensitive.
 
 #### Selecionar pela posição
 
-* li[1]
+        li[1]
 
-* //ul[@id='items']/li[position() = 1 or position() =4 ]
+        //ul[@id='items']/li[position() = 1 or position() =4 ]
 
-* //ul[@id='items']/li[position() = 1 or position() =last() ]
+        //ul[@id='items']/li[position() = 1 or position() =last() ]
 
-* //ul[@id='items']/li[position() > 1 ]
+        //ul[@id='items']/li[position() > 1 ]
 
 #### Navegar para cima e para baixo na html usando axes. CSS não tem essa função.
 
 ##### Para cima
 
-* //p[@id='unique']/parent::div
+        //p[@id='unique']/parent::div
 
-* //p[@id='unique']/parent::node()
+        //p[@id='unique']/parent::node()
 
-* //p[@id='unique']/ancestor::node()
+        //p[@id='unique']/ancestor::node()
 
-* //p[@id='unique']/ancestor-or-self::node()
+        //p[@id='unique']/ancestor-or-self::node()
 
-* //p[@id='unique']/preceding::node()
+        //p[@id='unique']/preceding::node()
 
- //p[@id='unique']/preceding::h1
+        //p[@id='unique']/preceding::h1
 
- //p[@id='outside']/preceding-sibling::node()
+        //p[@id='outside']/preceding-sibling::node()
 
 ##### Para baixo
 
-//div[@class='intro']/p
+    //div[@class='intro']/p
 
-//div[@class='intro']/child::p
+    //div[@class='intro']/child::p
 
-//div[@class='intro']/child::node()
+    //div[@class='intro']/child::node()
 
-//div[@class='intro']/following::node()
+    //div[@class='intro']/following::node()
 
-//div[@class='intro']/following-sibling::node()
+    //div[@class='intro']/following-sibling::node()
 
-//div[@class='intro']/descendant::node()
+    //div[@class='intro']/descendant::node()
 
 
 #### Comparação
@@ -318,3 +318,10 @@ Leia - https://escoladedados.org/tutoriais/xpath-para-raspagem-de-dados-em-html/
         scrapy crawl countries -o population_dataset.xml
         
         
+## Múltiplas páginas
+
+https://www.tinydeal.com.hk but now they changed it to https://www.cigabuy.com/consumer-electronics-c-56_75-pg-1.html
+
+Please make sure to use the new domain name 'cigabuy' instead of 'tinydeal'.
+
+
