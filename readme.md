@@ -295,7 +295,7 @@ Procura todas h1 na html
     //div[@class='intro']/descendant::node()
 
 
-#### Comparação
+#### Comparação entre xpath e css
 
 In [41]: response.xpath('//tbody/tr/td/a[@href]/text()')[0]
 Out[41]: <Selector xpath='//tbody/tr/td/a[@href]/text()' data='China'>
@@ -306,31 +306,31 @@ Out[42]: <Selector xpath='descendant-or-self::tbody/descendant-or-self::*/tr/des
 
 Leia - https://escoladedados.org/tutoriais/xpath-para-raspagem-de-dados-em-html/#:~:text=Basta%20selecionar%20o%20texto%20que,a%20op%C3%A7%C3%A3o%20'Copiar%20XPath'.&text=Esta%20fun%C3%A7%C3%A3o%20%C3%A9%20interessante%2C%20mas,ter%20express%C3%B5es%20leg%C3%ADveis%20ou%20curtas.
 
-### Após feitas mudanças necessárias para exportar nome do país e população
-
 * Para exportar 
         
         scrapy crawl countries -o population_dataset.json
 
-            Dentro do VSCODE alt+shift+f para formatar o json
+            No vscode alt+shift+f formata o json automaticamente.
 
         scrapy crawl countries -o population_dataset.csv
 
         scrapy crawl countries -o population_dataset.xml
         
         
-## Múltiplas páginas
+## Scraping múltiplas páginas
+
+    spider cigabuy
 
 https://www.cigabuy.com/consumer-electronics-c-56_75-pg-1.html
 
 scrapy startproject cigabuy
 scrapy genspider special_offers www.cigabuy.com/specials.html
 
-alterar para https
+Alterar para https
 
 * testes: 
 
-        scrapy shell https://www.cigabuy.com/consumer-electronics-c-56_75-pg-1.html
+scrapy shell https://www.cigabuy.com/consumer-electronics-c-56_75-pg-1.html
 
  response.xpath("//div[@class='r_b_c']").xpath(".//div[@class='p_box_wrapper']").css("div").xpath("a[@class='p_box_title']/text()").getall()
 
@@ -340,11 +340,49 @@ alterar para https
 
  response.xpath("//div[@class='r_b_c']").xpath(".//div[@class='p_box_wrapper']").css("div").xpath("a[@class='p_box_title']/@href").getall()
 
-
 scrapy crawl special_offers -o dataset_encoding.json
 
-adicionar 
 
-FEED_EXPORT_ENCODING = 'utf-8'
+* Pode har problemas de encoding no json por isso, alterar em settings.py: 
 
-dentro de settings dentro de cigabuy para não ter problemas com encoding para json
+    FEED_EXPORT_ENCODING = 'utf-8'
+
+* Alterar user-agent no spider cigabuy tem algumas formar como solução.
+    
+    user-agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/86.0.4240.75 Safari/537.36
+
+## Debug
+
+#### Parse Command
+
+scrapy parse --spider=countries -c parse_country --meta='{"country_name":"China"}' https://www.worldometers.info/world-population/china-population/
+
+#### scrapy shell
+
+#### Open in browser
+
+#### Debug com o arquivo runner.py que está no projeto cigabuy.
+
+* Possibilidade para salvar arquivo.csv sem linha de comando:
+    *  FEED_FORMAT
+    *  FEED_URI
+
+```
+import scrapy
+from scrapy.crawler import CrawlerProcess
+from scrapy.utils.project import get_project_settings
+from worldometers.spiders.countries import CountriesSpider
+
+
+#process = CrawlerProcess(settings=get_project_settings())
+
+process = CrawlerProcess({
+    'USER_AGENT': 'Mozilla/4.0 (compatible; MSIE 7.0; Windows NT 5.1)', 
+    'FEED_FORMAT': 'CSV', 
+    'FEED_URI': '~/export_vscode.csv',
+})
+
+process.crawl(CountriesSpider)
+process.start()
+
+```
