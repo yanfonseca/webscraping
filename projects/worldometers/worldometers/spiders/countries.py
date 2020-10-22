@@ -1,8 +1,9 @@
 # -*- coding: utf-8 -*-
 import scrapy
-
 # importados
-import logging
+#import logging
+#from scrapy.shell import inspect_response
+#from scrapy.utils.response import open_in_browser
 
 class CountriesSpider(scrapy.Spider):
     name = 'countries' 
@@ -11,8 +12,7 @@ class CountriesSpider(scrapy.Spider):
     allowed_domains = ['www.worldometers.info'] # Não pode ter / no fim. Limita o escopo de atuação do spider, não pode ter o http://
     #start_urls = ['http://www.worldometers.info/world-population/population-by-country/']
     start_urls = ['https://www.worldometers.info/world-population/population-by-country/'] #Todos os links que queremos buscar, mudei para https por causa do site
-    
-    # name, allowed_domains, start_urls, parse são variáveis padrão, o scrapy reconhece essas variáveis
+     # name, allowed_domains, start_urls, parse são variáveis padrão, o scrapy reconhece essas variáveis
     
     def parse(self, response):
         #pass
@@ -41,34 +41,33 @@ class CountriesSpider(scrapy.Spider):
             #yield scrapy.Request(url = absolute_url) 
             
             # 3 forma - ja acrescenta o domain a url relativa
-
             # cada reponse é enviada para parse_Country, só que dessa forma ainda não é possível acessar nome de dentro de parse_country
             #yield response.follow(url = link, callback = self.parse_country)
 
-            # 3 forma com o parse_country
+            # 4 forma com o parse_country
             # meta é um dicionário
             yield response.follow(url = link, callback = self.parse_country, meta = {'country_name':name})
-
 
         # retornar como dicionário
         #    yield {
                 #'title':title,
-            
         #    'country_name': name,
         #   'country_link': link
         #}
 
     def parse_country(self, response):
         #logging.info(response)
-
+        #inspect_response(response, self)
+        #open_in_browser(response)
+        #logging.info(response.status)
+        name = response.request.meta['country_name']
         rows = response.xpath("(//table[@class='table table-striped table-bordered table-hover table-condensed table-list'])[1]/tbody/tr")
 
         for row in rows:
-            name = response.request.meta['country_name']
             year = row.xpath('.//td[1]/text()').get()
             population = row.xpath('.//td[2]/strong/text()').get()
 
-            yield{
+            yield {
                 'country_name': name,
                 'year': year, 
                 'population': population
